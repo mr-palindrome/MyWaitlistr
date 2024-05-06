@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "eventkhojowaitlist"
+version = "0.1.0"
+description = ""
+authors = ["Nayan Das <ndas5144@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+pymongo = "^4.7.1"
+python-decouple = "^3.8"
+certifi = "^2024.2.2"
+flake8 = "^7.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
