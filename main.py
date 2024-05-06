@@ -17,4 +17,4 @@ app.add_middleware(
 )
 
 app.include_router(app_router)
-app.mount("/static", StaticFiles(directory="src/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
