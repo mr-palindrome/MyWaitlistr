@@ -155,6 +155,5 @@ venv/*
 .idea
 .idea/*
 log.txt
-log*
 prerequisites.sh
 .DS_Store
