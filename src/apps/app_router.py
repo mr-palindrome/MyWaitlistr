@@ -11,7 +11,7 @@ app_router: APIRouter = APIRouter(prefix='')
 
 @app_router.get("/favicon.ico", include_in_schema=False)
 def favicon():
-    return FileResponse(f"{BASE_DIR}/static/favicon.ico")
+    return FileResponse(f"{BASE_DIR.parent}/static/favicon.ico")
 
 if ENV_NAME.lower() in ["dev"]:
 
