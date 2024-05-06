@@ -2,12 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from app import app
 from src.apps.app_router import app_router
 
-
-app = FastAPI()
-
-# CORS middleware to allow requests from all origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
