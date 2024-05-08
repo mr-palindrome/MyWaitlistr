@@ -10,7 +10,7 @@ class TooManyRequestsReponse(BaseModel):
 
 
 class InternalServerErrorResponse(BaseModel):
-    msg: str = "Internal Server Error"
+    error: str = "Internal Server Error"
 
 
 class BadGatewayResponse(BaseModel):
@@ -22,4 +22,4 @@ class ServiceUnavailableResponse(BaseModel):
 
 
 class BadRequestResponse(BaseModel):
-    msg: str = "Bad Request"
+    error: str = "Bad Request"

@@ -15,7 +15,11 @@ flake8 = "^7.0.0"
 uvicorn = "^0.29.0"
 slowapi = "^0.1.9"
 pydantic = "^2.7.1"
+sentry-sdk = {version = "^2.1.1", extras = ["fastapi"]}
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
 
 [build-system]
 requires = ["poetry-core"]

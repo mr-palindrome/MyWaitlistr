@@ -9,6 +9,4 @@ router = APIRouter(prefix="")
 @router.get("/")
 async def landing_page(request: Request):
 
-    return templates.TemplateResponse(
-        request=request, name="home.html"
-    )
+    return templates.TemplateResponse(request=request, name="home.html")

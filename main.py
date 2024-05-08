@@ -1,9 +1,12 @@
-from fastapi import FastAPI
+from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app import app
 from src.apps.app_router import app_router
+from src.apps.base.exception_handler import http_custom_exception_handler
+
+app.add_exception_handler(HTTPException, http_custom_exception_handler)
 
 app.add_middleware(
     CORSMiddleware,
