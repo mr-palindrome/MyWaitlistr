@@ -10,7 +10,7 @@ from src.apps.base.exception_handler import http_custom_exception_handler
 from src.config.logs.sentry_management.sentry_manager import initialize_sentry
 
 
-initialize_sentry()
+await initialize_sentry()
 
 app.add_exception_handler(HTTPException, http_custom_exception_handler)
 
