@@ -38,6 +38,7 @@ router = APIRouter(prefix="/v1")
             "model": ServiceUnavailableResponse,
         },
     },
+    tags=["Waitlist"]
 )
 @limiter.limit("20/minute")
 async def add_to_waitlist(
