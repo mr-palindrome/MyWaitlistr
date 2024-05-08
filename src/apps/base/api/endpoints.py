@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 
-from src.config.settings import BASE_DIR
+from src.config.settings import BASE_DIR, templates
 
 router = APIRouter(prefix="")
-templates = Jinja2Templates(directory=str(BASE_DIR/"templates"))
 
 
 @router.get("/")

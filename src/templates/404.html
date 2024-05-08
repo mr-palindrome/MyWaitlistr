@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar Example</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+
+        body {
+            margin: 0; 
+            padding: 0; 
+            background-color: #f0f0f0;
+          }
+
+      .logo-img{
+        max-width: 200px;
+        height: auto;
+        display: block;
+        margin-top: -70px;
+        margin-bottom: -70px;
+      }
+
+      .body-context{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80vh;
+
+      }
+
+      .open-btn {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(90deg, #122E50 0%, #335b92 100%);
+        border: none;
+        color: white;
+        padding: 10px 20px; /* Adjusted padding */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 1.5em; /* Adjusted font size */
+        margin: 2em 0; /* Adjusted margin */
+        cursor: pointer;
+        border-radius: 12px;
+        transition: background 0.3s;
+    }
+    
+    .open-btn:hover {
+        background: linear-gradient(90deg, #335b92 0%, #122E50 100%);
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+        color: black;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .footer div {
+        display: flex;
+        align-items: center;
+    }
+    
+    .footer span {
+        margin: 0 10px;
+    }
+    
+    .footer a.footer-link {
+        text-decoration: none;
+        color: black;
+        margin: 0 10px;
+    }
+    
+    .social-logo {
+        width: 30px;
+        height: 30px;
+        margin: 0 10px;
+    }
+    
+    .footer a {
+        text-decoration: none;
+        color: black;
+        padding: 10px;
+    }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <!-- As a link -->
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <img
+          src="{{ url_for('static', path='/logo.png') }}"
+          alt="MyWaitlistr logo"
+          class="d-inline-block align-top logo-img"
+        />
+      </div>
+    </nav>
+
+    <!-- Not Found Error -->
+    <div class="body-context">
+      <div class="row">
+        <div class="col">
+          <div class="text-center">
+            <h1>404 - Not Found</h1>
+            <p>
+              The page you are looking for might have been removed, had its name
+              changed, or is temporarily unavailable.
+            </p>
+            <a href="/" target="_blank" class="open-btn">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>
+          <a href="https://twitter.com/Mr__palindrome" target="_blank">
+              <img src="{{ url_for('static', path='/socials/twitter.svg') }}" alt="Twitter Logo" class="social-logo">
+          </a>
+          <a href="https://linkedin.com/in/mr-palindrome/" target="_blank">
+              <img src="{{ url_for('static', path='/socials/linkedin.svg') }}" alt="LinkedIn Logo" class="social-logo">
+          </a>
+          <a href="https://github.com/mr-palindrome/MyWaitlistr" target="_blank">
+              <img src="{{ url_for('static', path='/socials/github.svg') }}" alt="GitHub Logo" class="social-logo">
+          </a>
+      </div>
+      <div>
+          <span>&copy; 2023 MyWaitlistr</span>
+      </div>
+  </div>
+  
+  
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="mrpalindrome" data-description="Support me on Buy me a coffee!" data-message="" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+  </body>
+  </html>
