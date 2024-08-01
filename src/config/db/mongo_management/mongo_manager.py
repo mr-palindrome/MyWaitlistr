@@ -9,3 +9,4 @@ mongo_db = mongo_client[MONGO_DB_NAME]
 
 
 waitlist_collection = mongo_db["waitlist"]
+project_waitlist_collection = mongo_db["project_waitlist"]
