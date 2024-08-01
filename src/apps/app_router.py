@@ -3,8 +3,11 @@ from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import FileResponse, HTMLResponse
 
-from app import app
+# from main import app
+from src.apps.auth.router import router as auth_router
 from src.apps.waitlist.router import router as waitlist_router
+from src.apps.projects.router import router as projects_router
+from src.apps.api_key.router import router as api_key_router
 from src.apps.base.router import router as base_router
 from src.config.settings import ENV_NAME, BASE_DIR, templates
 
@@ -15,14 +18,14 @@ app_router: APIRouter = APIRouter(prefix="")
 async def favicon():
     return FileResponse(f"{BASE_DIR.parent}/static/favicon.ico")
 
-
-@app.exception_handler(404)
-async def not_found(request: Request, exc: HTTPException):
-    if exc.status_code == 404:
-        return templates.TemplateResponse(
-            request=request, name="404.html", status_code=404
-        )
-    raise exc
+#
+# @app.exception_handler(404)
+# async def not_found(request: Request, exc: HTTPException):
+#     if exc.status_code == 404:
+#         return templates.TemplateResponse(
+#             request=request, name="404.html", status_code=404
+#         )
+#     raise exc
 
 
 if ENV_NAME.lower() in ["dev"]:
@@ -46,5 +49,8 @@ if ENV_NAME.lower() in ["dev"]:
         )
 
 
+app_router.include_router(auth_router)
+app_router.include_router(projects_router)
+app_router.include_router(api_key_router)
 app_router.include_router(base_router)
 app_router.include_router(waitlist_router)

@@ -1,6 +1,16 @@
 from pydantic import BaseModel
+from pydantic.generics import GenericModel
+from typing import Optional, Generic, TypeVar
+
+T = TypeVar("T")
 
 
+class SuccessResponse(BaseModel):
+    msg: str = "Success"
+
+class CreatedResponse(BaseModel):
+    msg: str = "Created"
+    
 class NotAuthorizedReponse(BaseModel):
     msg: str = "Not Authorized"
 
@@ -22,4 +32,15 @@ class ServiceUnavailableResponse(BaseModel):
 
 
 class BadRequestResponse(BaseModel):
-    error: str = "Bad Request"
+    error: str
+
+
+class ResponseSchema(GenericModel, Generic[T]):
+    message: str
+    data: Optional[T]
+
+
+class PaginatedResponseSchema(GenericModel, Generic[T]):
+    message: str
+    data: Optional[T]
+    total: int
