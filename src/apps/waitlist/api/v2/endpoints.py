@@ -1,11 +1,14 @@
 from datetime import datetime
+from typing import List
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Request, status, Security, Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
+from sqlalchemy.orm import Session
 
 # from app import limiter
-from src.config.db.mongo_management.mongo_manager import waitlist_collection
+
+from src.config.db.mongo_management.mongo_manager import project_waitlist_collection
 from src.apps.base.schemas.reponse_types import (
     SuccessResponse,
     ResponseSchema,
@@ -16,18 +19,22 @@ from src.apps.base.schemas.reponse_types import (
     ServiceUnavailableResponse,
     TooManyRequestsReponse,
 )
-from src.apps.waitlist.schemas.waitlist_schema import WaitlistRequest
+from src.apps.waitlist.schemas.waitlist_schema import WaitlistResponse, WaitlistRequest
+from src.apps.api_key.service import verify_api_key
+from src.config.db.postgres_management.pg_manager import get_db
+
 
 api_key_header = APIKeyHeader(name="api-key", auto_error=False)
 
-router = APIRouter(prefix="/v1")
+router = APIRouter(prefix="/v2")
+
+
 
 @router.post(
     "/add",
-    # response_model=ResponseSchema,
     summary="Add to Waitlist",
     responses={
-        200: {"description": "Successful response", "model": ResponseSchema},
+        200: {"description": "Successful response", "model": SuccessResponse},
         400: {"description": "Bad request", "model": BadRequestResponse},
         429: {"description": "Too many requests", "model": TooManyRequestsReponse},
         500: {
@@ -43,22 +50,29 @@ router = APIRouter(prefix="/v1")
     tags=["Waitlist"],
 )
 # @limiter.limit("20/minute")
-async def add_to_waitlist(
+async def add_to_waitlist_v2(
     request: Request,
     payload: WaitlistRequest,
-):
+    db: Session = Depends(get_db),
+    key: str = Security(api_key_header),
+) -> SuccessResponse:
+
+    # TODO: verify API key
+    api_key = verify_api_key(db, key)
+    if not api_key:
+        raise HTTPException(status_code=400, detail="Invalid API key")
 
     current_time = datetime.now()
     request_body = payload.model_dump()
 
-    if waitlist_collection.find_one({"email": request_body.get("email")}):
+    if project_waitlist_collection.find_one({"email": request_body.get("email"), "project_id": api_key.project_id}):
         raise HTTPException(status_code=400, detail="Email already in the waitlist")
 
-    waitlist_collection.insert_one(
-        {"email": request_body.get("email"), "date_added": current_time}
+    project_waitlist_collection.insert_one(
+        {"email": request_body.get("email"), "project_id": api_key.project_id, "date_added": current_time}
     )
 
     return JSONResponse(
-        status_code=200,
-        content={"message": "Email added to waitlist successfully!"}
+       content={"message": "Email added to waitlist successfully!"},
+        status_code=status.HTTP_200_OK
     )

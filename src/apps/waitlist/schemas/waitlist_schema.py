@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from datetime import datetime
 
 
 class WaitlistRequest(BaseModel):
@@ -10,8 +11,10 @@ class WaitlistRequest(BaseModel):
 
 
 class WaitlistResponse(BaseModel):
-    message: str = Field(
-        ...,
-        example="Email added to waitlist successfully!",
-        description="A message describing the result.",
-    )
+    email: str
+    date_added: str
+    _id: str
+    project_id: int
+
+    class Config:
+        from_attributes = True
