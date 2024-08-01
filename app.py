@@ -10,7 +10,7 @@ app = FastAPI(
     openapi_tags=[
         {"name": "Base", "description": "Operations related to base"},
         {"name": "Waitlist", "description": "Operations related to waitlists"},
-    ]
+    ],
 )
 
 limiter = Limiter(key_func=get_remote_address)
