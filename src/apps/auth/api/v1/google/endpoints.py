@@ -4,6 +4,8 @@ from fastapi import APIRouter, Depends, Request, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import Annotated, Optional
+
+from src.config.settings import BASE_FRONTEND_URL
 from src.config.db.postgres_management.pg_manager import get_db, engine
 from src.apps.auth.models import User
 from src.apps.auth.schemas.google_schema import GoogleInputSchema
@@ -82,10 +84,8 @@ async def google_login(
             content={"message": "Failed to login"}
         )
     
-    google_access_token = google_get_access_token(code=code, redirect_uri="http://localhost:5173/google")
+    google_access_token = google_get_access_token(code=code, redirect_uri=f"{BASE_FRONTEND_URL}/google")
     user_info = google_get_user_info(access_token=google_access_token)
-
-    print(user_info)
 
     user = get_user_by_email(db, user_info.get("email"))
 
