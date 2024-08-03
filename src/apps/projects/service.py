@@ -1,9 +1,16 @@
-from .models import Project
-from src.apps.auth.models import User
-from typing import Annotated, Optional
+import json
+from typing import Annotated, Optional, List
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
+
+from .models import Project
+from src.config.settings import BUCKET_NAME
+from src.config.db.redis_management.redis_manager import get_redis
+from src.apps.auth.models import User
 from src.apps.projects.schemas.response_schema import ProjectResponseSchema
+from src.apps.waitlist.schemas.waitlist_schema import WaitlistResponse
+from src.apps.base.s3_helpers import upload_data_to_s3
+
 
 
 def get_project_by_name(db: Session, name: str, owner_id: int):
@@ -130,3 +137,84 @@ def create_project_response_data(project: Project):
         url=project.url,
         description=project.description,
     ).dict()
+
+EXTENSION_TYPES = {
+    "csv": "text/csv",
+    "json": "application/json",
+    "xml": "application/xml",
+}
+
+def download_waitlist_csv(waitlist_data: List[WaitlistResponse]):
+    """
+    Download the waitlist data as a CSV file.
+
+    Args:
+        waitlist_data (List[WaitlistResponse]): The waitlist data.
+
+    Returns:
+        str: The CSV data.
+    """
+    csv_data = "email,date_added\n"
+    for item in waitlist_data:
+        csv_data += f"{item.email},{item.date_added}\n"
+    return csv_data
+
+
+def download_waitlist_json(waitlist_data: List[WaitlistResponse]):
+    """
+    Download the waitlist data as a JSON file.
+
+    Args:
+        waitlist_data (List[WaitlistResponse]): The waitlist data.
+
+    Returns:
+        str: The JSON data.
+    """
+    return json.dumps([item.dict() for item in waitlist_data], indent=4)
+
+def download_waitlist_xml(waitlist_data: List[WaitlistResponse]):
+    """
+    Download the waitlist data as a XML file.
+
+    Args:
+        waitlist_data (List[WaitlistResponse]): The waitlist data.
+
+    Returns:
+        str: The XML data.
+    """
+    xml_data = '<?xml version="1.0" encoding="UTF-8"?>\n<waitlist>\n'
+    for item in waitlist_data:
+        xml_data += f"<item>\n<email>{item.email}</email>\n<date_added>{item.date_added}</date_added>\n</item>\n"
+    xml_data += "</waitlist>\n"
+    return xml_data
+
+async def download_waitlist(waitlist_data: List[WaitlistResponse], extension_type: str, user_id:int, project_uuid: str, download_id: Optional[str] = None):
+    """
+    Download the waitlist data as a CSV file.
+
+    Args:
+        waitlist_data (List[WaitlistResponse]): The waitlist data.
+        extension_type (str): The file extension type.
+        user_id (int): The user id.
+        project_uuid (str): The project UUID.
+
+    Returns:
+        str: The S3 link to the download file
+    """
+    
+    if extension_type == "csv":
+        dump_data = download_waitlist_csv(waitlist_data)
+    elif extension_type == "json":
+        dump_data = download_waitlist_json(waitlist_data)
+    elif extension_type == "xml":
+        dump_data = download_waitlist_xml(waitlist_data)
+
+    file_name = f"{user_id}/{project_uuid}-waitlist.{extension_type}"
+
+    download_url = upload_data_to_s3(dump_data, file_name, BUCKET_NAME, expiry=3600)
+
+    if download_id:
+        redis = await get_redis()
+        await redis.set(download_id, download_url, ex=3600)
+
+    return download_url

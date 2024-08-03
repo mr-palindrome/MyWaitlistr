@@ -32,3 +32,25 @@ def create_s3_object(bucket, file_name, body):
 def read_json_file(file_name):
     with open(os.path.join(os.getcwd(), file_name)) as dd:
         return json.load(dd)
+
+
+def upload_data_to_s3(data, file_name, bucket, expiry=3600):
+    """
+    Upload data to S3.
+
+    Args:
+        data (str): The data to upload.
+        file_name (str): The file name.
+        bucket (str): The bucket name.
+        expiry (int): The expiry time in seconds.
+    
+    Returns:
+        str: The S3 link to the uploaded file.
+    """
+
+    s3 = boto3.client("s3")
+    s3.put_object(Bucket=bucket, Key=file_name, Body=data)
+    url = s3.generate_presigned_url(
+        "get_object", Params={"Bucket": bucket, "Key": file_name}, ExpiresIn=expiry
+    )
+    return url

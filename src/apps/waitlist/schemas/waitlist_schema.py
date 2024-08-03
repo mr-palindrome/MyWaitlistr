@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 from datetime import datetime
 
 
@@ -13,8 +14,8 @@ class WaitlistRequest(BaseModel):
 class WaitlistResponse(BaseModel):
     email: str
     date_added: str
-    _id: str
-    project_id: int
+    _id: Optional[str] = None
+    project_id: Optional[int] = None
 
     class Config:
         from_attributes = True
