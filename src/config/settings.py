@@ -35,6 +35,10 @@ DB_USER = config("DB_USER")
 DB_PASSWORD = config("DB_PASSWORD")
 DB_NAME = config("DB_NAME")
 
+REDIS_HOST = config("REDIS_HOST")
+REDIS_PORT = config("REDIS_PORT")
+REDIS_PASSWORD = config("REDIS_PASSWORD")
+
 SENTRY_DSN = config("SENTRY_DSN")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
