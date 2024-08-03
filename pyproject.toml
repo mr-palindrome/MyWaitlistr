@@ -19,7 +19,6 @@ sentry-sdk = {version = "^2.1.1", extras = ["fastapi"]}
 sqlalchemy = "^2.0.31"
 asyncpg = "^0.29.0"
 databases = "^0.9.0"
-psycopg2 = "^2.9.9"
 pyjwt = "^2.8.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.9"
@@ -28,6 +27,7 @@ pytz = "^2024.1"
 requests = "^2.32.3"
 redis = "^5.0.8"
 hiredis = "^3.0.0"
+psycopg2-binary = "^2.9.9"
 
 
 [tool.poetry.group.dev.dependencies]
